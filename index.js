@@ -7,6 +7,7 @@ const TOKEN = process.env.TOKEN;
 
 bot.login(TOKEN);
 
+// Roles that can use the !poll and !syntax commands
 const roles = ["répétiteurs", "chargés-labos", "prof"]
 
 // The string is used for the text part, and the emoji is used for the raection.
@@ -33,7 +34,7 @@ bot.on('ready', () => {
 });
 
 bot.on('message', msg => {
-  if(msg.content.startsWith('!syntax')) {
+  if(msg.content.startsWith('!syntax') && msg.member.roles !== null && msg.member.roles.some(role => roles.includes(role.name))) {
     msg.delete();
     msg.channel.send(`Syntax: \n !poll "Ici va le titre" [Première option | Deuxième Option]`)
   }
@@ -79,11 +80,11 @@ bot.on('message', msg => {
             .catch((err) => {
               console.log(err);
             })
+          } else {
+            msg.channel.send("Hmmm... you seem to be missing some arguments. Try !syntax to view the syntax")
           }
-        }
-      } else {
-        msg.channel.send("Hmmm... you seem to be missing some arguments. Try !syntax to view the syntax")
-      }
+        } 
+      } 
     }
   }
 });
